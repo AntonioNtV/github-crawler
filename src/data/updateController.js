@@ -15,7 +15,7 @@ const updateContributionsFromUser = async (username) => {
         const response = await axios.get(` https://github-contributions-api.now.sh/v1/${username}?format=nested`)
         
         const { contributions } = response.data;
-        const {date, count} = contributions.contributions[year][month][17]
+        const {date, count} = contributions.contributions[year][month][day]
 
         const todaysContributions = {
             date,
