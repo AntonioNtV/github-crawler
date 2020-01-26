@@ -1,5 +1,5 @@
-import GithubData from '../models/githubData'
-import mongoose from 'mongoose'
+const GithubData = require('../models/githubData')
+const axios = require('axios')
 
 const updateContributionsFromUser = async (username) => {
     const githubData = await GithubData.findOne( { username: username } );
@@ -15,7 +15,7 @@ const updateContributionsFromUser = async (username) => {
         const response = await axios.get(` https://github-contributions-api.now.sh/v1/${username}?format=nested`)
         
         const { contributions } = response.data;
-        const {date, count} = contributions.contributions[year][month][day]
+        const {date, count} = contributions.contributions[year][month][17]
 
         const todaysContributions = {
             date,
@@ -28,3 +28,13 @@ const updateContributionsFromUser = async (username) => {
 
     }
 }
+
+const updateAllUsers = async() => {
+    const allUsers = await GithubData.find({})
+
+    allUsers.forEach(element => {
+        updateContributionsFromUser(element.username)
+    });
+}
+
+module.exports = { updateAllUsers }
